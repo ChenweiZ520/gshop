@@ -6660,6 +6660,11 @@ vary@~1.1.2:
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
 
+vee-validate@^2.2.6:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/vee-validate/-/vee-validate-2.2.6.tgz#dacd6275039930f7e845f4a96fe61215339f7d1b"
+  integrity sha512-6161TmZpKmxSOfU4BCoeFXlFVcXWEU5e1bx82K3KMfja2sE5xNIEwZd75K8rRrsXd94aKyr+2sTXr7r4seYAKA==
+
 vendors@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/vendors/-/vendors-1.0.2.tgz#7fcb5eef9f5623b156bcea89ec37d63676f21801"
