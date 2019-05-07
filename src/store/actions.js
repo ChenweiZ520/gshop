@@ -3,12 +3,16 @@
 import {
   reqAddress,
   reqCategorys,
-  reqShops
+  reqShops,
+  reqUser,
+  reqLogout
 } from '../api'
 import {
   RECEIVE_ADDRESS,
   RECEIVE_CATEGORYS,
-  RECEIVE_SHOPS
+  RECEIVE_SHOPS,
+  RECEIVE_USER,
+  RESET_USER
 } from './mutation-types'
 
 export default {
@@ -38,5 +42,21 @@ export default {
       commit(RECEIVE_SHOPS,shops)
     }
   },
+  //获取user
+  async getUser({commit}){
+    const req = await reqUser()
+    if (req.code===0){
+      const user = req.data
+      commit(RECEIVE_USER,user)
+    }
+  },
+  //退出登录
+  async logout({commit}){
+    const req = await reqLogout()
+    if (req.code===0){
+      commit(RESET_USER)
+    }
+  }
+
 
 }

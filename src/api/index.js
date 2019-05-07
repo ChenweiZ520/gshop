@@ -26,5 +26,5 @@ export const reqSmsLogin = (phone,code)=>ajax(BASE + '/login_sms',{phone,code},'
 export const reqUser = ()=>ajax(BASE + '/userinfo')
 
 //退出登录
-export const logout = ()=>ajax(BASE + '/logout')
+export const reqLogout = ()=>ajax(BASE + '/logout')
 

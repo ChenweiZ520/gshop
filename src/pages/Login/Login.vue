@@ -67,6 +67,9 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {MessageBox,Toast} from 'mint-ui'
+  import {reqCode,reqPwdLogin,reqSmsLogin} from '../../api'
+  import {RECEIVE_USER} from '../../store/mutation-types'
   export default {
     name: 'Login',
     data(){
@@ -89,20 +92,31 @@
     },
     methods:{
       //发送验证码
-      sendCode(){
+      async sendCode(){
         this.time = 30
         const timeId = setInterval(()=>{
           this.time--
-          if (this.time===0){
+          if (this.time <= 0){
             clearInterval(timeId)
           }
         },1000)
+  
+        const req = await reqCode(this.phone)
+        if (req.code===0){
+          //alert('发送短信成功')
+          Toast('发送短信成功')
+        } else {
+          this.time = 0
+          MessageBox.alert(req.msg)
+        }
+        
       },
       
       //登录
       async login(){
         const {loginType,phone,code,name,pwd,captcha} = this
         let names
+        let req
         if (loginType){
           names = ['phone','code']
         } else {
@@ -110,7 +124,19 @@
         }
         const success = await this.$validator.validateAll(names)
         if (success){
-          alert('登录成功')
+          if (loginType) {
+            req = await reqSmsLogin(phone,code)
+          } else {
+            req = await reqPwdLogin({name,pwd,captcha})
+          }
+          if (req.code===0){
+            const user = req.data
+            this.$store.commit(RECEIVE_USER,user)
+            this.$router.replace('/profile')
+          } else {
+            MessageBox.alert(req.msg)
+          }
+          
         }
         
       },

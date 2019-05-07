@@ -15,6 +15,7 @@
     },
     mounted () {
       this.$store.dispatch('getAddress')
+      this.$store.dispatch('getUser')
     }
   }
 </script>
