@@ -12,14 +12,18 @@
         <form>
           <div :class="{on:loginType}">
             <section class="login_message">
-              <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
+              <input type="tel" maxlength="11" placeholder="手机号" v-model="phone"
+                name="phone" v-validate="'required|mobile'">
+              <span style="color: red;">{{errors.first('phone')}}</span>
               <button :disabled="!isRightPhone || time>0" class="get_verification"
                 :class="{right_phone:isRightPhone}" @click.prevent="sendCode">
                 {{time>0?`已发送(${time}s)`:'获取验证码'}}
               </button>
             </section>
             <section class="login_verification">
-              <input type="tel" maxlength="8" placeholder="验证码" v-model="code">
+              <input type="tel" maxlength="8" placeholder="验证码" v-model="code"
+                name="code" v-validate="{required:true,regex:/^\d{6}$/}">
+              <span style="color: red;">{{errors.first('code')}}</span>
             </section>
             <section class="login_hint">
               温馨提示：未注册硅谷外卖帐号的手机号，登录时将自动注册，且代表已同意
@@ -29,22 +33,29 @@
           <div :class="{on:!loginType}">
             <section>
               <section class="login_message">
-                <input type="tel" maxlength="11" placeholder="用户名" v-model="name">
+                <input type="tel" maxlength="11" placeholder="用户名" v-model="name"
+                  name="name" v-validate="'required'">
+                <span style="color: red;">{{errors.first('name')}}</span>
               </section>
               <section class="login_verification">
-                <input :type="isShowPwd?'text':'password'" maxlength="8" placeholder="密码" v-model="pwd">
+                <input :type="isShowPwd?'text':'password'" maxlength="8" placeholder="密码" v-model="pwd"
+                  name="pwd" v-validate="'required'">
                 <div class="switch_button" :class="isShowPwd?'on':'off'" @click="isShowPwd = !isShowPwd">
                   <div class="switch_circle" :class="{right:isShowPwd}"></div>
                   <span class="switch_text">{{isShowPwd?'abc':''}}</span>
                 </div>
+                <span style="color: red;">{{errors.first('pwd')}}</span>
               </section>
               <section class="login_message">
-                <input type="text" maxlength="11" placeholder="验证码" v-model="captcha">
-                <img class="get_verification" src="./images/captcha.svg" alt="captcha">
+                <input type="text" maxlength="11" placeholder="验证码" v-model="captcha"
+                  name="captcha" v-validate="{required:true,regex:/^.{4}$/}">
+                <img class="get_verification" src="http://localhost:5000/captcha" alt="captcha"
+                  ref="captcha" @click="updateCaptcha">
+                <span style="color: red;">{{errors.first('captcha')}}</span>
               </section>
             </section>
           </div>
-          <button class="login_submit">登录</button>
+          <button class="login_submit" @click.prevent="login">登录</button>
         </form>
         <a href="javascript:;" class="about_us">关于我们</a>
       </div>
@@ -77,6 +88,7 @@
       }
     },
     methods:{
+      //发送验证码
       sendCode(){
         this.time = 30
         const timeId = setInterval(()=>{
@@ -85,7 +97,29 @@
             clearInterval(timeId)
           }
         },1000)
+      },
+      
+      //登录
+      async login(){
+        const {loginType,phone,code,name,pwd,captcha} = this
+        let names
+        if (loginType){
+          names = ['phone','code']
+        } else {
+          names = ['name','pwd','captcha']
+        }
+        const success = await this.$validator.validateAll(names)
+        if (success){
+          alert('登录成功')
+        }
+        
+      },
+      //更新图片验证码
+      updateCaptcha(){
+        this.$refs.captcha.src = 'http://localhost:5000/captcha?time=' + Date.now()
       }
+      
+      
     }
     
   }

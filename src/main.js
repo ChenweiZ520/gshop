@@ -3,6 +3,7 @@ import App from './App'
 import router from './router'
 import store from './store'
 import Header from './components/Header/Header'
+import './validate'
 
 Vue.config.productionTip = false
 
