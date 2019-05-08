@@ -5,6 +5,7 @@ import router from './router'
 import store from './store'
 import Header from './components/Header/Header'
 import './validate'
+import './mock/mockServer'
 
 Vue.config.productionTip = false
 

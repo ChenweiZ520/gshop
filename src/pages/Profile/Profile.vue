@@ -104,7 +104,7 @@
     },
     methods:{
       logout(){
-        MessageBox.confirm('确定退出吗?').then(action => {
+        MessageBox.confirm('确定退出登录吗?').then(action => {
           this.$store.dispatch('logout')
         },action=>{
           console.log('取消')

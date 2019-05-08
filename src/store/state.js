@@ -6,6 +6,11 @@ export default {
   address:{},
   categorys:[],
   shops:[],
-  user:{}
+
+  user:{},
+
+  goods:[],
+  ratings:[],
+  info:{}
 
 }
