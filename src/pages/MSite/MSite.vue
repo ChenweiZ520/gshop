@@ -41,7 +41,12 @@
   export default {
     name: 'MSite',
     computed:{
-      ...mapState(['address','categorys']),
+      //...mapState(['address','categorys']),
+      ...mapState({
+        address:state=>state.msite.address,
+        categorys:state=>state.msite.categorys
+      }),
+      
       //用于显示轮播的数组
       categorysArr(){
         const {categorys} = this

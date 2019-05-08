@@ -60,7 +60,10 @@
   export default {
     name: 'ShopList',
     computed:{
-      ...mapState(['shops'])
+      // ...mapState(['shops'])
+      ...mapState({
+        shops:state=>state.msite.shops
+      })
     },
     components:{
       Star
