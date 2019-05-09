@@ -2,16 +2,18 @@
   <div>
     <div class="goods">
       <div class="menu-wrapper">
-        <ul>
-          <li class="menu-item" v-for="good in goods" :key="good.name">
+        <ul ref="leftUl">
+          <li class="menu-item" v-for="(good,index) in goods" :key="good.name"
+            :class="{current:currentIndex===index}" @click="selectItem(index)">
             <span class="text bottom-border-1px">
               <img class="icon" :src="good.icon" v-show="good.icon">
               {{good.name}}</span>
           </li>
         </ul>
       </div>
+      
       <div class="foods-wrapper">
-        <ul>
+        <ul ref="rightUl">
           <li class="food-list-hook" v-for="good in goods" :key="good.name">
             <h1 class="title">{{good.name}}</h1>
             <ul>
@@ -47,19 +49,89 @@
   import BScroll from 'better-scroll'
   export default {
     name: 'Goods',
+    data(){
+      return {
+        scrollY:0,
+        tops:[],
+      }
+    },
     computed:{
       ...mapState({
         goods:state=>state.shop.goods
-      })
+      }),
+  
+      currentIndex(){
+        const {scrollY,tops} = this
+        const index = tops.findIndex((item,index)=>{
+          return scrollY>=item && scrollY<tops[index+1]
+        })
+        
+        if(this.index !== index && this.leftScroll){
+          this.index = index
+          const li = this.$refs.leftUl.children[index]
+          this.leftScroll.scrollToElement(li,300)
+        }
+        
+        // if(this.leftScroll){
+        //   const li = this.$refs.leftUl.children[index]
+        //   this.leftScroll.scrollToElement(li,300)
+        // }
+  
+        return index
+      },
+      
+    },
+    methods:{
+      //获取右侧分类tops数组
+      _initTops(){
+        const tops = []
+        let top = 0
+        tops.push(top)
+        const lis = this.$refs.rightUl.children
+        Array.from(lis).forEach((item,index)=>{
+          top += item.clientHeight
+          tops.push(top)
+        })
+        this.tops = tops
+        //console.log(tops)
+      },
+      //滑动
+      _initScroll(){
+        this.leftScroll = new BScroll('.menu-wrapper',{
+          click:true
+        })
+        this.rightScroll = new BScroll('.foods-wrapper',{
+          probeType:1,
+        })
+        //监测右侧滑动
+        this.rightScroll.on('scroll',({x,y})=>{
+          //console.log(y)
+          this.scrollY = Math.abs(y)
+        })
+        //监测右侧滑动结束
+        this.rightScroll.on('scrollEnd',({x,y})=>{
+          this.scrollY = Math.abs(y)
+        })
+        
+      },
+      //点击左侧
+      selectItem(index){
+        const top = this.tops[index]
+        this.scrollY = top
+        this.rightScroll.scrollTo(0,-top,300)
+      }
+      
+      
     },
     watch:{
       goods(){
         this.$nextTick(()=>{
-          new BScroll('.menu-wrapper')
-          new BScroll('.foods-wrapper')
+          this._initScroll()
+          this._initTops()
         })
       }
     }
+    
   }
 </script>
 
