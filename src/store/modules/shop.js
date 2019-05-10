@@ -1,7 +1,11 @@
+
+import Vue from 'vue'
 import {
   RECEIVE_GOODS,
   RECEIVE_INFO,
-  RECEIVE_RATINGS
+  RECEIVE_RATINGS,
+  ADD_FOOD_COUNT,
+  DELETE_FOOD_COUNT
 } from '@/store/mutation-types'
 import {reqGoods, reqInfo, reqRatings} from '@/api'
 
@@ -20,6 +24,23 @@ const mutations = {
   [RECEIVE_INFO](state,info){
     state.info = info
   },
+
+  [ADD_FOOD_COUNT](state,{food}){
+    if (food.count){
+      food.count++
+    }else{
+      Vue.set(food,'count',1)
+
+    }
+  },
+  [DELETE_FOOD_COUNT](state,{food}){
+    if (food.count>0){
+      food.count--
+
+    }
+  },
+
+
 }
 const actions = {
   //获取商品
@@ -46,6 +67,17 @@ const actions = {
       commit(RECEIVE_INFO,info)
     }
   },
+  //更新食物count
+  updateFoodCount({commit},{isAdd,food}){
+
+    if(isAdd){
+      commit(ADD_FOOD_COUNT,{food})
+    } else {
+      commit(DELETE_FOOD_COUNT,{food})
+    }
+  },
+
+
 }
 
 export default {

@@ -3,7 +3,7 @@
     <nav class="shop-nav"
          :style="{backgroundImage: `url(${info.bgImg})`}">
       <a class="back" @click="$router.back()">
-        <i class="iconfont icon-arrow_left"><</i>
+        <i class="iconfont icon-arrow_left"></i>
       </a>
     </nav>
     <div class="shop-content" @click="isShowBulletin=true">
@@ -81,7 +81,7 @@
             {{info.bulletin}}
           </div>
           <div class="mask-footer">
-            <span class="iconfont icon-close" @click="isShowBulletin=false">X</span>
+            <span class="iconfont icon-close" @click="isShowBulletin=false"></span>
           </div>
         </div>
         <div class="brief-modal-cover" @click="isShowBulletin=false"></div>
@@ -104,7 +104,7 @@
       
           </ul>
           <div class="activity-sheet-close">
-            <span class="iconfont icon-close" @click="isShowSupports=false">X</span>
+            <span class="iconfont icon-close" @click="isShowSupports=false"></span>
           </div>
         </div>
         <div class="activity-sheet-cover" @click="isShowSupports=false"></div>

@@ -6,11 +6,13 @@ import store from './store'
 import Header from './components/Header/Header'
 import './validate'
 import './mock/mockServer'
+import CartControl from '@/components/CartControl/CartControl'
 
 Vue.config.productionTip = false
 
 Vue.component('Header',Header)
 Vue.component(Button.name, Button)
+Vue.component('CartControl',CartControl)
 
 new Vue({
   el: '#app',
