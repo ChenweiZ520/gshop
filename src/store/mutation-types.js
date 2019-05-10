@@ -14,3 +14,5 @@ export const RECEIVE_INFO = 'receive_info'
 export const ADD_FOOD_COUNT = 'add_food_count'
 export const DELETE_FOOD_COUNT = 'delete_food_count'
 
+export const CLEAR_CART = 'clear_cart'
+

@@ -5,14 +5,16 @@ import {
   RECEIVE_INFO,
   RECEIVE_RATINGS,
   ADD_FOOD_COUNT,
-  DELETE_FOOD_COUNT
+  DELETE_FOOD_COUNT,
+  CLEAR_CART
 } from '@/store/mutation-types'
 import {reqGoods, reqInfo, reqRatings} from '@/api'
 
 const state = {
   goods:[],
   ratings:[],
-  info:{}
+  info:{},
+  cartFoods:[]
 }
 const mutations = {
   [RECEIVE_GOODS](state,goods){
@@ -30,15 +32,26 @@ const mutations = {
       food.count++
     }else{
       Vue.set(food,'count',1)
-
+      state.cartFoods.push(food)
     }
   },
   [DELETE_FOOD_COUNT](state,{food}){
     if (food.count>0){
       food.count--
 
+      if (food.count===0){
+        state.cartFoods.splice(state.cartFoods.indexOf(food),1)
+      }
+
     }
   },
+
+  //清空购物车
+  [CLEAR_CART](state){
+    state.cartFoods.forEach(food => food.count = 0)
+    state.cartFoods = []
+  },
+
 
 
 }
@@ -80,8 +93,22 @@ const actions = {
 
 }
 
+const getters = {
+  //购物车中food的总数量
+  totalFoodCount(state){
+    return state.cartFoods.reduce((pre,food)=> pre + food.count,0)
+  },
+  //购物车中food的总价格
+  totalFoodPrice(state){
+    return state.cartFoods.reduce((pre,food)=> pre + food.count * food.price,0)
+  }
+
+
+}
+
 export default {
   state,
   mutations,
-  actions
+  actions,
+  getters
 }
