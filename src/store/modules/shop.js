@@ -101,7 +101,16 @@ const getters = {
   //购物车中food的总价格
   totalFoodPrice(state){
     return state.cartFoods.reduce((pre,food)=> pre + food.count * food.price,0)
+  },
+  //ratings的总数量
+  totalRatingCount(state){
+    return state.ratings.length
+  },
+  //推荐的数量
+  positiveTotalCount(state){
+    return state.ratings.reduce((pre,rating)=>pre+(rating.rateType===0?1:0),0)
   }
+
 
 
 }

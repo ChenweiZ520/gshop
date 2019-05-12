@@ -1,17 +1,17 @@
 <template>
   <div class="ratings-filter">
     <div class="rating-type border-1px">
-      <span class="block">
-        全部<span class="count">1</span>
+      <span class="block" :class="{active:selectType===2}" @click="setSelectType(2)">
+        全部<span class="count">{{totalRatingCount}}</span>
       </span>
-      <span class="block active">
-        推荐<span class="count">1</span>
+      <span class="block" :class="{active:selectType===0}" @click="setSelectType(0)">
+        推荐<span class="count">{{positiveTotalCount}}</span>
       </span>
-      <span class="block">
-        吐槽<span class="count">0</span>
+      <span class="block" :class="{active:selectType===1}" @click="setSelectType(1)">
+        吐槽<span class="count">{{totalRatingCount - positiveTotalCount}}</span>
       </span>
     </div>
-    <div class="switch on">
+    <div class="switch" :class="{on:onlyHasText}" @click="toggleOnlyHasText">
       <span class="iconfont icon-check_circle"></span>
       <span class="text">只看有内容的评价</span>
     </div>
@@ -19,8 +19,19 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {mapGetters} from 'vuex'
   export default {
-    name: 'RatingSelect'
+    name: 'RatingSelect',
+    props:{
+      selectType:Number,
+      onlyHasText:Boolean,
+      setSelectType:Function,
+      toggleOnlyHasText:Function
+    },
+    computed:{
+      ...mapGetters(['totalRatingCount','positiveTotalCount'])
+    }
+    
   }
 </script>
 

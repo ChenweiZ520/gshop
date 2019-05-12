@@ -26,11 +26,16 @@
   
       <Split/>
   
-      <RatingSelect></RatingSelect>
+      <RatingSelect
+        :selectType="selectType"
+        :onlyHasText="onlyHasText"
+        :setSelectType="setSelectType"
+        :toggleOnlyHasText="toggleOnlyHasText"
+        ></RatingSelect>
       
       <div class="rating-wrapper">
         <ul>
-          <li class="rating-item" v-for="(rating,index) in ratings" :key="index">
+          <li class="rating-item" v-for="(rating,index) in selectRatings" :key="index">
             <div class="avatar">
               <img width="28" height="28" :src="rating.avatar">
             </div>
@@ -61,14 +66,34 @@
     name: 'Ratings',
     data(){
       return {
-      
+        selectType:2, //0：推荐，1：吐槽，2：所有
+        onlyHasText:false, //是否有内容
+        
       }
     },
     computed:{
       ...mapState({
         info:state=>state.shop.info,
         ratings:state=>state.shop.ratings
-      })
+      }),
+  
+      selectRatings(){
+        const {selectType,onlyHasText,ratings} = this
+        return ratings.filter((rating,index)=>{
+          const {rateType,text} = rating
+          return (selectType===2 || selectType==rateType) && (!onlyHasText || text.length>0)
+        
+        })
+        
+      },
+      
+    },
+    mounted(){
+      if (this.ratings.length>0){
+        new BScroll('.ratings',{
+          click:true
+        })
+      }
     },
     watch:{
       ratings(){
@@ -77,6 +102,14 @@
             click:true
           })
         })
+      }
+    },
+    methods:{
+      setSelectType(type){
+        return this.selectType = type
+      },
+      toggleOnlyHasText(){
+        return this.onlyHasText = !this.onlyHasText
       }
     },
     components:{

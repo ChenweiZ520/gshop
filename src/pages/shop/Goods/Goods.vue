@@ -89,6 +89,12 @@
       },
       
     },
+    mounted(){
+      if(this.goods.length>0){
+        this._initScroll()
+        this._initTops()
+      }
+    },
     methods:{
       //获取右侧分类tops数组
       _initTops(){
